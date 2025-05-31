@@ -12,11 +12,15 @@ const formSchema = z.object({
 });
 
 export async function submitContactForm(values: ContactFormValues) {
+  console.log("--- Contact Form Submission Attempt ---");
+  const emailUser = process.env.EMAIL_USER;
+  const emailPass = process.env.EMAIL_PASS;
+
+  console.log(`EMAIL_USER loaded by server: ${emailUser ? '******** (loaded)' : 'NO - NOT FOUND IN ENVIRONMENT. Check .env.local and restart server.'}`);
+  console.log(`EMAIL_PASS loaded by server: ${emailPass ? '******** (loaded)' : 'NO - NOT FOUND IN ENVIRONMENT. Check .env.local and restart server.'}`);
+
   try {
     const validatedData = formSchema.parse(values);
-
-    const emailUser = process.env.EMAIL_USER;
-    const emailPass = process.env.EMAIL_PASS;
 
     if (!emailUser || !emailPass) {
       console.error("---------------------------------------------------------------------------------");
@@ -32,8 +36,8 @@ export async function submitContactForm(values: ContactFormValues) {
       console.error("   (Use an App Password for Gmail if 2-Step Verification is enabled on the EMAIL_USER account. Your regular password will NOT work.)");
       console.error("3. CRITICAL: You MUST restart your Next.js development server (stop 'npm run dev' and run it again) after creating or changing the .env.local file. Environment variables are loaded at startup.");
       console.error(" ");
-      console.error(`Current loaded value for EMAIL_USER: ${emailUser ? '******** (loaded)' : 'NOT FOUND / UNDEFINED'}`);
-      console.error(`Current loaded value for EMAIL_PASS: ${emailPass ? '******** (loaded)' : 'NOT FOUND / UNDEFINED'}`);
+      console.error(`Current loaded value for EMAIL_USER (from process.env): ${emailUser ? '******** (loaded)' : 'NOT FOUND / UNDEFINED'}`);
+      console.error(`Current loaded value for EMAIL_PASS (from process.env): ${emailPass ? '******** (loaded)' : 'NOT FOUND / UNDEFINED'}`);
       console.error("---------------------------------------------------------------------------------");
       return { success: false, error: "Email server not configured. Please check server logs and setup .env.local file correctly." };
     }
@@ -55,7 +59,6 @@ export async function submitContactForm(values: ContactFormValues) {
       html: `
         <div style="font-family: Arial, sans-serif; line-height: 1.6;">
           <h2 style="color: #333;">New Contact Form Submission</h2>
-          <hr style="border: 0; border-top: 1px solid #eee;">
           <p><strong>From:</strong> ${validatedData.name}</p>
           <p><strong>User's Email (for Reply-To):</strong> <a href="mailto:${validatedData.email}" style="color: #007bff;">${validatedData.email}</a></p>
           <hr style="border: 0; border-top: 1px solid #eee;">
