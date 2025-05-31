@@ -4,10 +4,11 @@ import Link from 'next/link';
 import { AnimatedBanner } from '@/components/home/AnimatedBanner';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowRight, Briefcase, Lightbulb, Users, Send, MessageSquare } from 'lucide-react';
+import { ArrowRight, Briefcase, Lightbulb, Users, Send, MessageSquare, Star } from 'lucide-react';
 import { ContactForm } from '@/components/connect/ContactForm';
 import { ReviewsSection } from '@/components/connect/ReviewsSection';
 import { PricingSection } from '@/components/home/PricingSection';
+
 
 interface Service {
   id: string;
@@ -97,6 +98,7 @@ const galleryItems: GalleryItem[] = [
   },
 ];
 
+
 export default function HomePage() {
   return (
     <div className="space-y-16">
@@ -135,7 +137,7 @@ export default function HomePage() {
                   alt="AbhiConnect Logo"
                   layout="fill"
                   objectFit="contain"
-                  className="rounded-lg animate-image-float"
+                  className="rounded-lg animate-hero-image-pulse-float"
                   data-ai-hint="modern abstract logo"
                 />
               </div>
@@ -156,7 +158,7 @@ export default function HomePage() {
         </Card>
       </section>
       
-      {/* What I Offer Section */}
+      {/* What I Offer Section (Services) */}
       <section id="services" className="container mx-auto px-4 py-12">
         <h2 className="text-3xl font-headline font-semibold text-center mb-10">What I Offer</h2>
         <div className="grid md:grid-cols-1 lg:grid-cols-3 gap-8">
