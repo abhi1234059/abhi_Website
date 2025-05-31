@@ -1,8 +1,9 @@
+
 import Link from 'next/link';
 import { Navigation } from './Navigation';
 import { Button } from '@/components/ui/button';
 import { Menu } from 'lucide-react';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet';
 
 export function Header() {
   return (
@@ -24,10 +25,21 @@ export function Header() {
             </SheetTrigger>
             <SheetContent side="right" className="w-[250px] bg-card p-6">
               <nav className="flex flex-col space-y-4">
-                <Link href="/" className="text-lg hover:text-primary transition-colors">Home</Link>
-                <Link href="/about" className="text-lg hover:text-primary transition-colors">About</Link>
-                <Link href="/connect" className="text-lg hover:text-primary transition-colors">Connect</Link>
-                <Link href="/gallery" className="text-lg hover:text-primary transition-colors">Gallery</Link>
+                <SheetClose asChild>
+                  <Link href="/" className="text-lg hover:text-primary transition-colors">Home</Link>
+                </SheetClose>
+                <SheetClose asChild>
+                  <Link href="/#about" className="text-lg hover:text-primary transition-colors">About</Link>
+                </SheetClose>
+                 <SheetClose asChild>
+                  <Link href="/#services" className="text-lg hover:text-primary transition-colors">Services</Link>
+                </SheetClose>
+                <SheetClose asChild>
+                  <Link href="/#gallery" className="text-lg hover:text-primary transition-colors">Gallery</Link>
+                </SheetClose>
+                <SheetClose asChild>
+                  <Link href="/#connect" className="text-lg hover:text-primary transition-colors">Connect</Link>
+                </SheetClose>
               </nav>
             </SheetContent>
           </Sheet>
@@ -36,3 +48,5 @@ export function Header() {
     </header>
   );
 }
+
+    

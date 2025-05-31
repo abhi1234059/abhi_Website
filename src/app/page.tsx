@@ -1,13 +1,107 @@
+
+import Image from 'next/image';
+import Link from 'next/link';
 import { AnimatedBanner } from '@/components/home/AnimatedBanner';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import Image from 'next/image';
-import Link from 'next/link';
-import { ArrowRight, MessageCircle, Palette, Rocket } from 'lucide-react';
+import { ArrowRight, Briefcase, Lightbulb, Users, Send, MessageSquare, Star } from 'lucide-react';
+import { ContactForm } from '@/components/connect/ContactForm';
+import { ReviewsSection } from '@/components/connect/ReviewsSection';
+
+// Data and Interfaces from former about/page.tsx
+interface Service {
+  id: string;
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+}
+
+const services: Service[] = [
+  {
+    id: "web",
+    icon: <Briefcase className="w-8 h-8 text-primary" />,
+    title: "Website Design & Development",
+    description: "Crafting modern, responsive websites tailored to your needs. From simple portfolios to complex web applications.",
+  },
+  {
+    id: "graphics",
+    icon: <Lightbulb className="w-8 h-8 text-primary" />,
+    title: "Graphic Design & 3D Animation",
+    description: "Eye-catching graphic designs, logos, branding materials, and immersive 3D animations that bring your ideas to life.",
+  },
+  {
+    id: "digital",
+    icon: <Users className="w-8 h-8 text-primary" />,
+    title: "Digital Help & Consultation",
+    description: "Providing expert advice and hands-on support for your digital challenges, social media strategies, and online presence.",
+  },
+];
+
+// Data and Interfaces from former gallery/page.tsx
+interface GalleryItem {
+  id: string;
+  src: string;
+  alt: string;
+  title: string;
+  description: string;
+  aiHint: string;
+}
+
+const galleryItems: GalleryItem[] = [
+  {
+    id: '1',
+    src: 'https://placehold.co/600x400.png',
+    alt: 'Abstract 3D render',
+    title: 'Cosmic Swirls',
+    description: 'A mesmerizing swirl of colors in 3D space.',
+    aiHint: 'abstract 3D'
+  },
+  {
+    id: '2',
+    src: 'https://placehold.co/600x400.png',
+    alt: 'Geometric shapes animation still',
+    title: 'Geometric Dance',
+    description: 'A snapshot from an animation featuring dancing geometric forms.',
+    aiHint: 'geometric animation'
+  },
+  {
+    id: '3',
+    src: 'https://placehold.co/600x400.png',
+    alt: 'Character model',
+    title: 'Stylized Character',
+    description: 'A 3D model of a cartoon-style character.',
+    aiHint: '3D character'
+  },
+  {
+    id: '4',
+    src: 'https://placehold.co/600x400.png',
+    alt: 'Product visualization',
+    title: 'Product Showcase',
+    description: 'A realistic 3D render of a product concept.',
+    aiHint: 'product render'
+  },
+  {
+    id: '5',
+    src: 'https://placehold.co/600x400.png',
+    alt: 'Animated logo concept',
+    title: 'Logo in Motion',
+    description: 'Concept for an animated brand logo.',
+    aiHint: 'animated logo'
+  },
+  {
+    id: '6',
+    src: 'https://placehold.co/600x400.png',
+    alt: 'Architectural visualization',
+    title: 'Modern Villa',
+    description: 'A 3D visualization of a modern architectural design.',
+    aiHint: 'architecture 3D'
+  },
+];
 
 export default function HomePage() {
   return (
     <div className="space-y-16">
+      {/* Hero Section */}
       <section className="text-center py-12 md:py-20 bg-gradient-to-br from-primary/10 via-background to-accent/10 rounded-xl shadow-lg overflow-hidden">
         <div className="container mx-auto px-4">
           <AnimatedBanner name="Dankhara Abhi" />
@@ -17,7 +111,7 @@ export default function HomePage() {
           </p>
           <div className="mt-10 animate-fade-in-up animation-delay-500">
             <Button asChild size="lg" className="group bg-primary hover:bg-accent transition-all duration-300 ease-in-out transform hover:scale-105 shadow-lg">
-              <Link href="/connect">
+              <Link href="/#connect">
                 Contact Me <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
               </Link>
             </Button>
@@ -25,104 +119,141 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="container mx-auto px-4">
-        <h2 className="text-3xl font-headline font-semibold text-center mb-12">My Core Services</h2>
-        <div className="grid md:grid-cols-3 gap-8">
-          <ServiceHighlight
-            icon={<Palette className="w-12 h-12 text-primary" />}
-            title="Graphic Design"
-            description="Creative logos, branding, and visuals that tell your story."
-          />
-          <ServiceHighlight
-            icon={<Rocket className="w-12 h-12 text-primary" />}
-            title="3D Animation"
-            description="Engaging 3D animations and motion graphics for your projects."
-          />
-          <ServiceHighlight
-            icon={<MessageCircle className="w-12 h-12 text-primary" />}
-            title="Digital Help"
-            description="Website assistance, tech support, and general digital solutions."
-          />
+      {/* About Section */}
+      <section id="about" className="container mx-auto px-4 py-12 space-y-12">
+        <div className="text-center">
+          <h1 className="text-4xl font-headline font-bold mb-4">About Me</h1>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Learn more about my journey, skills, and passion for creating digital solutions.
+          </p>
         </div>
+        <Card className="overflow-hidden shadow-xl">
+          <div className="md:flex">
+            <div className="md:w-1/3 relative min-h-[300px] md:min-h-0">
+              <Image
+                src="https://placehold.co/400x600.png"
+                alt="Dankhara Abhi Profile"
+                layout="fill"
+                objectFit="cover"
+                className="rounded-l-lg"
+                data-ai-hint="professional portrait"
+              />
+            </div>
+            <div className="md:w-2/3 p-8 md:p-12">
+              <h2 className="text-3xl font-headline font-semibold text-primary mb-6">Hi, I'm Abhi Dankhara</h2>
+              <p className="text-lg text-foreground/90 mb-4 leading-relaxed">
+                I am a passionate and creative individual specializing in web development, graphic design, and 3D animation. With a keen eye for detail and a commitment to excellence, I strive to deliver high-quality digital solutions that not only meet but exceed client expectations.
+              </p>
+              <p className="text-lg text-foreground/90 mb-4 leading-relaxed">
+                My journey into the digital world began with a fascination for how technology can transform ideas into tangible realities. Over the years, I've honed my skills in various technologies and design principles, always eager to learn and adapt to the ever-evolving digital landscape.
+              </p>
+              <p className="text-lg text-foreground/90 leading-relaxed">
+                "Dankhara Abhi ek personal connect service platform chhe jethi tame saral rite mane message kari shako, rating aapi shako ane contact ma rahi shako. Hu sav thi ochha daam ma graphic, animation, ane digital help provide karu chu. Tamne koi help joiye? Toh message kari ne vato karie!"
+              </p>
+            </div>
+          </div>
+        </Card>
       </section>
       
-      <section className="container mx-auto px-4 py-12">
-        <Card className="bg-card shadow-xl overflow-hidden">
-            <div className="md:flex">
-                <div className="md:w-1/2">
-                    <Image
-                        src="https://placehold.co/600x400.png"
-                        alt="Abhi Dankhara working"
-                        width={600}
-                        height={400}
-                        className="object-cover w-full h-64 md:h-full"
-                        data-ai-hint="developer workspace"
-                    />
+      {/* What I Offer Section */}
+      <section id="services" className="container mx-auto px-4 py-12">
+        <h2 className="text-3xl font-headline font-semibold text-center mb-10">What I Offer</h2>
+        <div className="grid md:grid-cols-1 lg:grid-cols-3 gap-8">
+          {services.map((service) => (
+            <Card key={service.id} className="hover:shadow-lg transition-shadow duration-300 flex flex-col">
+              <CardHeader className="items-center text-center">
+                <div className="p-3 bg-primary/10 rounded-full mb-3">
+                    {service.icon}
                 </div>
-                <div className="md:w-1/2 p-8 md:p-12 flex flex-col justify-center">
-                    <CardHeader>
-                        <CardTitle className="text-3xl font-headline text-primary">About Dankhara Abhi</CardTitle>
-                        <CardDescription className="text-lg mt-2 text-foreground/80">
-                            Passionate about creating stunning visuals and seamless digital experiences.
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <p className="text-foreground/90 mb-6">
-                            "Dankhara Abhi ek personal connect service platform chhe jethi tame saral rite mane message kari shako, rating aapi shako ane contact ma rahi shako. Hu sav thi ochha daam ma graphic, animation, ane digital help provide karu chu. Tamne koi help joiye? Toh message kari ne vato karie!"
-                        </p>
-                        <Button asChild variant="outline" className="border-primary text-primary hover:bg-primary/10">
-                            <Link href="/about">
-                                Learn More About Me
-                            </Link>
-                        </Button>
-                    </CardContent>
-                </div>
-            </div>
-        </Card>
-    </section>
+                <CardTitle className="font-headline">{service.title}</CardTitle>
+              </CardHeader>
+              <CardContent className="flex-grow">
+                <p className="text-muted-foreground text-center">{service.description}</p>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </section>
 
+      {/* Gallery Section */}
+      <section id="gallery" className="container mx-auto px-4 py-12 space-y-12">
+        <div className="text-center">
+          <h1 className="text-4xl font-headline font-bold mb-4">My Gallery</h1>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            A showcase of my 3D work, animations, and graphic design projects.
+          </p>
+        </div>
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {galleryItems.map((item) => (
+            <Card key={item.id} className="overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 group">
+              <div className="relative w-full aspect-video">
+                <Image
+                  src={item.src}
+                  alt={item.alt}
+                  layout="fill"
+                  objectFit="cover"
+                  className="transition-transform duration-500 group-hover:scale-105"
+                  data-ai-hint={item.aiHint}
+                />
+              </div>
+              <CardContent className="p-6">
+                <h3 className="text-xl font-headline font-semibold mb-2 text-primary">{item.title}</h3>
+                <p className="text-sm text-foreground/80">{item.description}</p>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </section>
+
+      {/* Connect Section */}
+      <section id="connect" className="container mx-auto px-4 py-12 space-y-12">
+        <div className="text-center">
+          <h1 className="text-4xl font-headline font-bold mb-4">Connect With Me</h1>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Have a question, project idea, or just want to say hi? I'd love to hear from you!
+          </p>
+        </div>
+        <div className="grid md:grid-cols-2 gap-12 items-start">
+          <Card className="shadow-xl">
+            <CardHeader>
+              <CardTitle className="font-headline text-2xl flex items-center">
+                <Send className="w-6 h-6 mr-2 text-primary" /> Send a Message
+              </CardTitle>
+              <CardDescription>
+                Fill out the form below and I'll get back to you as soon as possible.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ContactForm />
+            </CardContent>
+          </Card>
+          <div className="space-y-8">
+            <Card className="shadow-xl">
+              <CardHeader>
+                <CardTitle className="font-headline text-2xl flex items-center">
+                  <MessageSquare className="w-6 h-6 mr-2 text-green-500" /> Direct Contact
+                </CardTitle>
+                <CardDescription>
+                  Prefer a more direct approach?
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <Button asChild size="lg" className="w-full bg-green-500 hover:bg-green-600 text-white">
+                  <a href="https://wa.me/918320446826" target="_blank" rel="noopener noreferrer">
+                    <MessageSquare className="w-5 h-5 mr-2" /> Chat on WhatsApp
+                  </a>
+                </Button>
+                 <p className="text-sm text-muted-foreground text-center">
+                  Or email me at: <a href="mailto:sitequickpersonal@gmail.com" className="text-primary hover:underline">sitequickpersonal@gmail.com</a>
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+        <ReviewsSection />
+      </section>
     </div>
   );
 }
 
-interface ServiceHighlightProps {
-  icon: React.ReactNode;
-  title: string;
-  description: string;
-}
-
-function ServiceHighlight({ icon, title, description }: ServiceHighlightProps) {
-  return (
-    <Card className="text-center p-6 hover:shadow-2xl transition-shadow duration-300">
-      <div className="flex justify-center mb-4">
-        {icon}
-      </div>
-      <h3 className="text-xl font-headline font-semibold mb-2">{title}</h3>
-      <p className="text-foreground/70">{description}</p>
-    </Card>
-  );
-}
-
-// Add this to your tailwind.config.js if you want to use animation-delay utilities
-// plugins: [
-//   function ({ addUtilities }) {
-//     const newUtilities = {};
-//     const delays = ['100', '200', '300', '400', '500', '700', '1000'];
-//     delays.forEach(delay => {
-//       newUtilities[`.animation-delay-${delay}`] = {
-//         animationDelay: `${delay}ms`,
-//       };
-//     });
-//     addUtilities(newUtilities, ['responsive', 'hover']);
-//   },
-// ],
-// Make sure to define 'fade-in-up' animation in keyframes in tailwind.config.js
-// keyframes: {
-//   'fade-in-up': {
-//     '0%': { opacity: '0', transform: 'translateY(20px)' },
-//     '100%': { opacity: '1', transform: 'translateY(0)' },
-//   },
-// },
-// animation: {
-//   'fade-in-up': 'fade-in-up 0.5s ease-out forwards',
-// },
+    
