@@ -42,7 +42,7 @@ const services: Service[] = [
 interface GalleryItem {
   id: string;
   // src, alt, aiHint are no longer used for an initials avatar, but kept for potential future use
-  src?: string; 
+  src?: string;
   alt?: string;
   title: string;
   description: string;
@@ -100,6 +100,18 @@ const galleryItems: GalleryItem[] = [
   },
 ];
 
+const getInitials = (title: string): string => {
+  const words = title.split(' ').filter(word => word.trim() !== '');
+  if (words.length === 0) {
+    return '??'; // Fallback for empty or whitespace-only titles
+  }
+  if (words.length === 1) {
+    return words[0].substring(0, 2).toUpperCase(); // e.g., "Art" -> "AR", "A" -> "A"
+  }
+  // Two or more words
+  return (words[0][0] + (words[1] ? words[1][0] : '')).toUpperCase(); // e.g., "Cosmic Swirls" -> "CS"
+};
+
 
 export default function HomePage() {
   return (
@@ -133,10 +145,13 @@ export default function HomePage() {
         <Card className="overflow-hidden shadow-xl">
           <div className="md:flex">
             <div className="md:w-1/3 flex flex-col items-center justify-center p-8 bg-primary/5 rounded-l-lg">
-               <Avatar className="h-48 w-48 shadow-xl ring-4 ring-primary/20 ring-offset-4 ring-offset-background">
-                <AvatarImage src="https://placehold.co/200x200.png" alt="Dankhara Abhi" data-ai-hint="professional portrait" />
-                <AvatarFallback className="text-5xl bg-primary/10 text-primary">AD</AvatarFallback>
-              </Avatar>
+              <div className="relative w-48 h-48">
+                <div className="absolute inset-0 flex items-center justify-center animate-logo-sway-float">
+                  <div className="w-40 h-40 rounded-full shadow-2xl bg-accent/10 flex items-center justify-center ring-4 ring-accent/20 ring-offset-4 ring-offset-background">
+                    <Network className="w-24 h-24 text-accent" />
+                  </div>
+                </div>
+              </div>
             </div>
             <div className="md:w-2/3 p-8 md:p-12">
               <h2 className="text-3xl font-headline font-semibold text-primary mb-6">Hi, I'm Abhi Dankhara</h2>
@@ -153,7 +168,7 @@ export default function HomePage() {
           </div>
         </Card>
       </section>
-      
+
       {/* What I Offer Section (Services) */}
       <section id="services" className="container mx-auto px-4 py-12">
         <h2 className="text-3xl font-headline font-semibold text-center mb-10">What I Offer</h2>
@@ -189,10 +204,10 @@ export default function HomePage() {
           {galleryItems.map((item) => (
             <Card key={item.id} className="overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 group flex flex-col items-center text-center">
               <div className="py-6 px-4"> {/* Padding for the avatar */}
-                <div 
+                <div
                   className="w-32 h-32 rounded-full border-[4px] border-[#d6bcfa] shadow-lg bg-[#f1f1f1] text-[#7b2cbf] flex items-center justify-center text-3xl font-bold group-hover:scale-110 transition-transform duration-300 ease-in-out"
                 >
-                  AD
+                  {getInitials(item.title)}
                 </div>
               </div>
               <CardContent className="pb-6 px-4 pt-0 flex-grow w-full"> {/* Ensure content is below avatar */}
