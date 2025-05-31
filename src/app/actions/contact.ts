@@ -29,30 +29,35 @@ export async function submitContactForm(values: ContactFormValues) {
 
     if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
       console.error("EMAIL_USER or EMAIL_PASS environment variables are not set. Email sending will fail.");
+      // This specific error message is displayed to the user if .env.local is not set up correctly.
       return { success: false, error: "Email server not configured. Please contact support." };
     }
 
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
+        user: process.env.EMAIL_USER, // Your Gmail address (from .env.local)
+        pass: process.env.EMAIL_PASS, // Your Gmail App Password (from .env.local)
       },
     });
 
     const mailOptions = {
-      from: `"${validatedData.name}" <${process.env.EMAIL_USER}>`,
-      replyTo: validatedData.email,
+      from: `"${validatedData.name}" <${process.env.EMAIL_USER}>`, // Sender address: your server's email, name part is user's name
+      replyTo: validatedData.email, // Crucial: ensures replies go to the user's actual email
       to: "sitequickpersonal@gmail.com", // Your destination email
       subject: `New Contact Form Submission from ${validatedData.name}`,
       html: `
-        <p>You have a new contact form submission:</p>
-        <ul>
-          <li><strong>Name:</strong> ${validatedData.name}</li>
-          <li><strong>Email:</strong> ${validatedData.email}</li>
-        </ul>
-        <p><strong>Message:</strong></p>
-        <p>${validatedData.message.replace(/\n/g, "<br>")}</p>
+        <div style="font-family: Arial, sans-serif; line-height: 1.6;">
+          <h2 style="color: #333;">New Contact Form Submission</h2>
+          <hr style="border: 0; border-top: 1px solid #eee;">
+          <p><strong>From:</strong> ${validatedData.name} (${validatedData.email})</p>
+          <p><strong>Reply-To:</strong> <a href="mailto:${validatedData.email}" style="color: #007bff;">${validatedData.email}</a></p>
+          <hr style="border: 0; border-top: 1px solid #eee;">
+          <p><strong>Message:</strong></p>
+          <div style="background-color: #f9f9f9; border-left: 4px solid #007bff; padding: 10px; margin-top: 5px;">
+            <p style="margin: 0;">${validatedData.message.replace(/\n/g, "<br>")}</p>
+          </div>
+        </div>
       `,
     };
 
@@ -64,19 +69,17 @@ export async function submitContactForm(values: ContactFormValues) {
       console.error("Error sending email:", emailError);
       let errorMessage = "Failed to send email. Please try again later.";
 
-      // Check if it's an authentication error
       if (emailError instanceof Error && 'code' in emailError && (emailError as any).code === 'EAUTH') {
         errorMessage = "Failed to send email due to authentication issues. Please check server logs and email credentials.";
         console.error(
             "NODEMAILER AUTHENTICATION ERROR (EAUTH):\n" +
-            "1. Verify EMAIL_USER and EMAIL_PASS in your .env.local file are correct for the Gmail account you're sending from.\n" +
-            "2. If using 2-Step Verification on Gmail, YOU MUST USE AN APP PASSWORD for EMAIL_PASS. Your regular password will not work.\n" +
-            "   Search 'Sign in with App Passwords Google' for instructions on how to generate one.\n" +
-            "3. If not using 2-Step Verification (less secure), ensure 'Less secure app access' is enabled in your Google account settings. (Not recommended - use App Passwords instead).\n" +
-            "4. Ensure you've restarted your development server after changing .env.local."
+            "This means Gmail rejected the login attempt from the server.\n" +
+            "1. VERIFY .env.local: Ensure EMAIL_USER and EMAIL_PASS in your project's root .env.local file are correct for the Gmail account you're sending from.\n" +
+            "2. APP PASSWORD: If using 2-Step Verification on that Gmail account, YOU MUST USE AN APP PASSWORD for EMAIL_PASS. Your regular password will NOT work. Search 'Sign in with App Passwords Google' for instructions.\n" +
+            "3. LESS SECURE APP ACCESS (Not Recommended): If NOT using 2-Step Verification, ensure 'Less secure app access' is enabled in your Google account settings. (This is less secure; using an App Password is preferred).\n" +
+            "4. RESTART SERVER: After any changes to .env.local, you MUST restart your development server (npm run dev)."
         );
       } else if (emailError instanceof Error) {
-        // Log other types of Nodemailer errors
         console.error("Nodemailer error details:", emailError.message);
       }
       return { success: false, error: errorMessage };
