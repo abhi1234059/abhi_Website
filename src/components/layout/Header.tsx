@@ -35,6 +35,9 @@ export function Header() {
                   <Link href="/#services" className="text-lg hover:text-primary transition-colors">Services</Link>
                 </SheetClose>
                 <SheetClose asChild>
+                  <Link href="/#packages" className="text-lg hover:text-primary transition-colors">Packages</Link>
+                </SheetClose>
+                <SheetClose asChild>
                   <Link href="/#gallery" className="text-lg hover:text-primary transition-colors">Gallery</Link>
                 </SheetClose>
                 <SheetClose asChild>
@@ -48,5 +51,3 @@ export function Header() {
     </header>
   );
 }
-
-    

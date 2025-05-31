@@ -10,6 +10,7 @@ const navLinks = [
   { href: '/', label: 'Home', sectionId: '' },
   { href: '/#about', label: 'About Me', sectionId: 'about' },
   { href: '/#services', label: 'Services', sectionId: 'services' },
+  { href: '/#packages', label: 'Packages', sectionId: 'packages' },
   { href: '/#gallery', label: 'Gallery', sectionId: 'gallery' },
   { href: '/#connect', label: 'Connect', sectionId: 'connect' },
 ];
@@ -37,7 +38,7 @@ export function Navigation() {
           }
         });
       },
-      { threshold: 0.3, rootMargin: "-50% 0px -50% 0px" } // Adjust threshold and rootMargin as needed
+      { threshold: 0.3, rootMargin: "-40% 0px -40% 0px" } // Adjust threshold and rootMargin
     );
 
     navLinks.forEach(link => {
@@ -48,7 +49,12 @@ export function Navigation() {
     });
     
     // Initial check for hash
-    handleHashChange();
+    handleHashChange(); // Call on mount
+    if (pathname === '/' && !window.location.hash) { // If on homepage and no hash, set activeHash to empty for 'Home' link
+        setActiveHash('');
+    }
+
+
     window.addEventListener('hashchange', handleHashChange);
 
     return () => {
@@ -60,14 +66,15 @@ export function Navigation() {
       });
       window.removeEventListener('hashchange', handleHashChange);
     };
-  }, []);
+  }, [pathname]); // Re-run effect if pathname changes, useful for initial load on a specific hash path.
   
   const isActive = (link: typeof navLinks[0]) => {
-    if (link.href === '/') {
-      // Home is active if no hash or pathname is just /
-      return (pathname === '/' && !activeHash) || (pathname === '/' && !window.location.hash);
+    if (link.href === '/') { // Home link
+      return (pathname === '/' && !activeHash) ;
     }
-    return activeHash === link.sectionId;
+    // For other section links, activeHash should match sectionId
+    // and we should be on the homepage (pathname === '/')
+    return pathname === '/' && activeHash === link.sectionId;
   };
 
 
@@ -83,15 +90,31 @@ export function Navigation() {
               const targetId = link.href.substring(2);
               const targetElement = document.getElementById(targetId);
               if (targetElement) {
-                targetElement.scrollIntoView({ behavior: 'smooth' });
-                // Manually update hash if needed, or rely on scroll detection
+                // Calculate offset to account for sticky header
+                const headerOffset = 80; // Adjust this value based on your header's height
+                const elementPosition = targetElement.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: "smooth"
+                });
+
                 if(window.location.hash !== `#${targetId}`) {
                     history.pushState(null, '', `#${targetId}`);
                 }
                 setActiveHash(targetId);
               }
-            } else {
-                 setActiveHash(''); // For root home link
+            } else { // For root home link or other pages
+                 setActiveHash(''); 
+                 if (pathname !== '/') {
+                    // Allow default navigation if not already on homepage
+                 } else {
+                    // If on homepage, scroll to top
+                    e.preventDefault();
+                    window.scrollTo({ top: 0, behavior: 'smooth'});
+                    history.pushState(null, '', '/');
+                 }
             }
           }}
           className={cn(
@@ -105,5 +128,3 @@ export function Navigation() {
     </nav>
   );
 }
-
-    

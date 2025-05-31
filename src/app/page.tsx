@@ -4,9 +4,10 @@ import Link from 'next/link';
 import { AnimatedBanner } from '@/components/home/AnimatedBanner';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowRight, Briefcase, Lightbulb, Users, Send, MessageSquare, Star } from 'lucide-react';
+import { ArrowRight, Briefcase, Lightbulb, Users, Send, MessageSquare } from 'lucide-react';
 import { ContactForm } from '@/components/connect/ContactForm';
 import { ReviewsSection } from '@/components/connect/ReviewsSection';
+import { PricingSection } from '@/components/home/PricingSection'; // Added import
 
 // Data and Interfaces from former about/page.tsx
 interface Service {
@@ -175,6 +176,9 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Website Packages Section */}
+      <PricingSection />
+
       {/* Gallery Section */}
       <section id="gallery" className="container mx-auto px-4 py-12 space-y-12">
         <div className="text-center">
@@ -255,5 +259,3 @@ export default function HomePage() {
     </div>
   );
 }
-
-    
