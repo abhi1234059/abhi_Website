@@ -1,7 +1,7 @@
 
 "use client";
 
-import Image from 'next/image'; // Added import for Image component
+import { Zap } from 'lucide-react'; // Import the Zap icon
 
 interface AnimatedBannerProps {
   name: string;
@@ -10,24 +10,19 @@ interface AnimatedBannerProps {
 export function AnimatedBanner({ name }: AnimatedBannerProps) {
   return (
     <div className="relative py-8 flex flex-col items-center"> {/* Centering content vertically */}
-      <div className="mb-6 animate-hero-image-pulse-float"> {/* Container for logo with animation */}
-        <Image
-          src="https://placehold.co/120x120.png" 
-          alt="AbhiConnect Logo Placeholder"
-          width={120}
-          height={120}
-          className="rounded-full shadow-lg" 
-          data-ai-hint="modern abstract logo"
-        />
+      <div className="mb-6 animate-hero-image-pulse-float"> {/* Container for icon with animation */}
+        <div className="w-32 h-32 rounded-full shadow-lg bg-accent/10 flex items-center justify-center">
+          <Zap className="w-20 h-20 text-accent" />
+        </div>
       </div>
       <h1 className="text-5xl md:text-7xl font-headline font-bold animate-pulse-glow text-primary select-none text-center">
         {name.split("").map((char, index) => (
-          <span 
+          <span
             key={index}
             className="inline-block transition-all duration-500 ease-out hover:scale-110 hover:text-accent"
             style={{ animationDelay: `${index * 0.05}s` }}
           >
-            {char === " " ? "\u00A0" : char} 
+            {char === " " ? "\u00A0" : char}
           </span>
         ))}
       </h1>
