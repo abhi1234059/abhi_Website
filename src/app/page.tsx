@@ -41,7 +41,6 @@ const services: Service[] = [
 
 interface GalleryItem {
   id: string;
-  // src, alt, aiHint are no longer used for an initials avatar, but kept for potential future use
   src?: string;
   alt?: string;
   title: string;
@@ -55,7 +54,7 @@ const galleryItems: GalleryItem[] = [
     src: 'https://placehold.co/600x400.png',
     alt: 'Abstract 3D render',
     title: 'Cosmic Swirls',
-    description: 'A mesmerizing swirl of colors in 3D space.',
+    description: 'An ethereal dance of nebulae and stardust, rendered in vibrant 3D to capture the awe of deep space.',
     aiHint: 'animated 3D abstract'
   },
   {
@@ -63,7 +62,7 @@ const galleryItems: GalleryItem[] = [
     src: 'https://placehold.co/600x400.png',
     alt: 'Geometric shapes animation still',
     title: 'Geometric Dance',
-    description: 'A snapshot from an animation featuring dancing geometric forms.',
+    description: 'Sharp lines and bold shapes come alive in this dynamic animation still, showcasing precision and modern aesthetics.',
     aiHint: 'dynamic 3D geometry'
   },
   {
@@ -71,7 +70,7 @@ const galleryItems: GalleryItem[] = [
     src: 'https://placehold.co/600x400.png',
     alt: 'Character model',
     title: 'Stylized Character',
-    description: 'A 3D model of a cartoon-style character.',
+    description: 'A unique 3D character model, crafted with a distinct stylized look, ready to bring narratives to life.',
     aiHint: 'stylized 3D character model'
   },
   {
@@ -79,7 +78,7 @@ const galleryItems: GalleryItem[] = [
     src: 'https://placehold.co/600x400.png',
     alt: 'Product visualization',
     title: 'Product Showcase',
-    description: 'A realistic 3D render of a product concept.',
+    description: 'Sleek lines and photorealistic textures highlight this 3D product visualization, perfect for impactful marketing.',
     aiHint: 'sleek 3D product'
   },
   {
@@ -87,7 +86,7 @@ const galleryItems: GalleryItem[] = [
     src: 'https://placehold.co/600x400.png',
     alt: 'Animated 3D Concept',
     title: 'Motion Graphics Abstract',
-    description: 'Concept for an animated 3D piece.',
+    description: 'A captivating abstract piece exploring the interplay of light, form, and movement in animated 3D.',
     aiHint: 'complex 3D animation'
   },
   {
@@ -95,7 +94,7 @@ const galleryItems: GalleryItem[] = [
     src: 'https://placehold.co/600x400.png',
     alt: 'Architectural visualization',
     title: 'Modern Villa',
-    description: 'A 3D visualization of a modern architectural design.',
+    description: 'Experience architectural elegance with this detailed 3D visualization of a contemporary villa, blending luxury and design.',
     aiHint: 'modern 3D architecture'
   },
 ];
@@ -103,13 +102,12 @@ const galleryItems: GalleryItem[] = [
 const getInitials = (title: string): string => {
   const words = title.split(' ').filter(word => word.trim() !== '');
   if (words.length === 0) {
-    return '??'; // Fallback for empty or whitespace-only titles
+    return '??';
   }
   if (words.length === 1) {
-    return words[0].substring(0, 2).toUpperCase(); // e.g., "Art" -> "AR", "A" -> "A"
+    return words[0].substring(0, 2).toUpperCase();
   }
-  // Two or more words
-  return (words[0][0] + (words[1] ? words[1][0] : '')).toUpperCase(); // e.g., "Cosmic Swirls" -> "CS"
+  return (words[0][0] + (words[1] ? words[1][0] : '')).toUpperCase();
 };
 
 
