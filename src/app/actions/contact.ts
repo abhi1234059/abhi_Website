@@ -15,43 +15,48 @@ export async function submitContactForm(values: ContactFormValues) {
   try {
     const validatedData = formSchema.parse(values);
 
-    // --- IMPORTANT ---
-    // For this email sending to work, you MUST:
-    // 1. Create a .env.local file in your project root.
-    // 2. Add your Gmail credentials to .env.local:
-    //    EMAIL_USER=your_gmail_address_to_send_from@gmail.com
-    //    EMAIL_PASS=your_gmail_app_password
-    //    (Use an App Password if you have 2-Step Verification enabled on your Gmail account.
-    //     Search "Sign in with App Passwords Google" for instructions.)
-    // 3. Ensure .env.local is in your .gitignore file.
-    // 4. Restart your development server (npm run dev) after creating/modifying .env.local.
-    // --- --- --- ---
+    const emailUser = process.env.EMAIL_USER;
+    const emailPass = process.env.EMAIL_PASS;
 
-    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-      console.error("EMAIL_USER or EMAIL_PASS environment variables are not set. Email sending will fail.");
-      // This specific error message is displayed to the user if .env.local is not set up correctly.
+    if (!emailUser || !emailPass) {
+      console.error("---------------------------------------------------------------------------------");
+      console.error("ERROR: Email Environment Variables Not Set!");
+      console.error("The application cannot find EMAIL_USER or EMAIL_PASS in its environment.");
+      console.error("This usually means the .env.local file is missing, misplaced, or the server was not restarted after creating/modifying it.");
+      console.error(" ");
+      console.error("Troubleshooting Steps:");
+      console.error("1. Ensure a file named '.env.local' (with a leading dot) exists in the ROOT of your project directory (the same level as package.json).");
+      console.error("2. The .env.local file should contain:");
+      console.error("   EMAIL_USER=your_gmail_address@gmail.com");
+      console.error("   EMAIL_PASS=your_gmail_app_password");
+      console.error("   (Replace with your actual credentials. Use an App Password for Gmail if 2FA is enabled.)");
+      console.error("3. CRITICAL: You MUST restart your Next.js development server (stop 'npm run dev' and run it again) after creating or changing the .env.local file.");
+      console.error(" ");
+      console.error(`Current value for EMAIL_USER: ${emailUser ? '******** (loaded)' : 'NOT FOUND'}`);
+      console.error(`Current value for EMAIL_PASS: ${emailPass ? '******** (loaded)' : 'NOT FOUND'}`);
+      console.error("---------------------------------------------------------------------------------");
       return { success: false, error: "Email server not configured. Please contact support." };
     }
 
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: process.env.EMAIL_USER, // Your Gmail address (from .env.local)
-        pass: process.env.EMAIL_PASS, // Your Gmail App Password (from .env.local)
+        user: emailUser,
+        pass: emailPass,
       },
     });
 
     const mailOptions = {
-      from: `"${validatedData.name}" <${process.env.EMAIL_USER}>`, // Sender address: your server's email, name part is user's name
-      replyTo: validatedData.email, // Crucial: ensures replies go to the user's actual email
+      from: `"${validatedData.name}" <${emailUser}>`,
+      replyTo: validatedData.email,
       to: "sitequickpersonal@gmail.com", // Your destination email
       subject: `New Contact Form Submission from ${validatedData.name}`,
       html: `
         <div style="font-family: Arial, sans-serif; line-height: 1.6;">
           <h2 style="color: #333;">New Contact Form Submission</h2>
           <hr style="border: 0; border-top: 1px solid #eee;">
-          <p><strong>From:</strong> ${validatedData.name} (${validatedData.email})</p>
-          <p><strong>Reply-To:</strong> <a href="mailto:${validatedData.email}" style="color: #007bff;">${validatedData.email}</a></p>
+          <p><strong>From:</strong> ${validatedData.name}</p>
+          <p><strong>User's Email (Reply-To):</strong> <a href="mailto:${validatedData.email}" style="color: #007bff;">${validatedData.email}</a></p>
           <hr style="border: 0; border-top: 1px solid #eee;">
           <p><strong>Message:</strong></p>
           <div style="background-color: #f9f9f9; border-left: 4px solid #007bff; padding: 10px; margin-top: 5px;">
@@ -72,12 +77,14 @@ export async function submitContactForm(values: ContactFormValues) {
       if (emailError instanceof Error && 'code' in emailError && (emailError as any).code === 'EAUTH') {
         errorMessage = "Failed to send email due to authentication issues. Please check server logs and email credentials.";
         console.error(
+            "---------------------------------------------------------------------------------\n" +
             "NODEMAILER AUTHENTICATION ERROR (EAUTH):\n" +
             "This means Gmail rejected the login attempt from the server.\n" +
-            "1. VERIFY .env.local: Ensure EMAIL_USER and EMAIL_PASS in your project's root .env.local file are correct for the Gmail account you're sending from.\n" +
-            "2. APP PASSWORD: If using 2-Step Verification on that Gmail account, YOU MUST USE AN APP PASSWORD for EMAIL_PASS. Your regular password will NOT work. Search 'Sign in with App Passwords Google' for instructions.\n" +
+            "1. VERIFY .env.local CREDENTIALS: Ensure EMAIL_USER and EMAIL_PASS in your project's root .env.local file are correct for the Gmail account you're sending from.\n" +
+            "2. APP PASSWORD (if 2-Step Verification is ON): If using 2-Step Verification on that Gmail account, YOU MUST USE AN APP PASSWORD for EMAIL_PASS. Your regular password will NOT work. Search 'Sign in with App Passwords Google' for instructions.\n" +
             "3. LESS SECURE APP ACCESS (Not Recommended): If NOT using 2-Step Verification, ensure 'Less secure app access' is enabled in your Google account settings. (This is less secure; using an App Password is preferred).\n" +
-            "4. RESTART SERVER: After any changes to .env.local, you MUST restart your development server (npm run dev)."
+            "4. RESTART SERVER: After any changes to .env.local or Google Account settings, you MUST restart your development server (npm run dev).\n" +
+            "---------------------------------------------------------------------------------"
         );
       } else if (emailError instanceof Error) {
         console.error("Nodemailer error details:", emailError.message);
