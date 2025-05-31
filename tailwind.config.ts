@@ -86,15 +86,17 @@ export default {
           '0%, 100%': { textShadow: '0 0 5px hsl(var(--primary-foreground)), 0 0 10px hsl(var(--primary))' },
           '50%': { textShadow: '0 0 10px hsl(var(--primary-foreground)), 0 0 20px hsl(var(--primary)), 0 0 30px hsl(var(--primary))' },
         },
-        'image-float': { // Kept original for other uses if any, though currently only hero image used it.
-          '0%': { transform: 'translateY(0px)' },
-          '50%': { transform: 'translateY(-6px)' },
-          '100%': { transform: 'translateY(0px)' },
-        },
         heroImagePulseFloat: {
             '0%': { transform: 'translateY(0px) scale(1)' },
             '50%': { transform: 'translateY(-8px) scale(1.03)' },
             '100%': { transform: 'translateY(0px) scale(1)' },
+        },
+        'logo-sway-float': {
+          '0%': { transform: 'translateY(0px) translateX(0px) scale(1)' },
+          '25%': { transform: 'translateY(-5px) translateX(5px) scale(1.02)' },
+          '50%': { transform: 'translateY(-10px) translateX(0px) scale(1.04)' },
+          '75%': { transform: 'translateY(-5px) translateX(-5px) scale(1.02)' },
+          '100%': { transform: 'translateY(0px) translateX(0px) scale(1)' },
         },
         'pan-object-position': {
           '0%': { 'object-position': '48% 50%' },
@@ -106,8 +108,8 @@ export default {
         'accordion-up': 'accordion-up 0.2s ease-out',
         'fade-in-up': 'fadeInUp 0.5s ease-out forwards',
         'pulse-glow': 'pulseGlow 2.5s infinite ease-in-out',
-        'image-float': 'image-float 5s ease-in-out infinite alternate',
         'hero-image-pulse-float': 'heroImagePulseFloat 6s ease-in-out infinite alternate',
+        'logo-sway-float': 'logo-sway-float 7s ease-in-out infinite alternate',
         'image-pan-slow': 'pan-object-position 10s ease-in-out infinite alternate',
       },
     },

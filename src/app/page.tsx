@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { AnimatedBanner } from '@/components/home/AnimatedBanner';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowRight, Briefcase, Lightbulb, Users, Send, MessageSquare, Star } from 'lucide-react';
+import { ArrowRight, Briefcase, Lightbulb, Users, Send, MessageSquare, Star, Network } from 'lucide-react';
 import { ContactForm } from '@/components/connect/ContactForm';
 import { ReviewsSection } from '@/components/connect/ReviewsSection';
 import { PricingSection } from '@/components/home/PricingSection';
@@ -131,15 +131,13 @@ export default function HomePage() {
         <Card className="overflow-hidden shadow-xl">
           <div className="md:flex">
             <div className="md:w-1/3 relative min-h-[300px] md:min-h-0 flex items-center justify-center p-4">
-              <div className="w-full aspect-square max-w-[250px] md:max-w-full relative">
-                <Image
-                  src="https://placehold.co/300x300.png"
-                  alt="AbhiConnect Logo"
-                  layout="fill"
-                  objectFit="contain"
-                  className="rounded-lg animate-hero-image-pulse-float"
-                  data-ai-hint="modern abstract logo"
-                />
+              <div 
+                className="w-full aspect-square max-w-[250px] md:max-w-full relative animate-logo-sway-float"
+                data-ai-hint="connection icon"
+              >
+                <div className="w-full h-full rounded-lg bg-accent/10 flex items-center justify-center shadow-xl p-4">
+                  <Network className="w-4/5 h-4/5 text-accent" />
+                </div>
               </div>
             </div>
             <div className="md:w-2/3 p-8 md:p-12">
