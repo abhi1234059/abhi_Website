@@ -3,7 +3,7 @@
 
 import type { ContactFormValues } from "@/components/connect/ContactForm";
 import { z } from "zod";
-// import nodemailer from 'nodemailer'; // Uncomment when implementing email sending
+import nodemailer from 'nodemailer';
 
 const formSchema = z.object({
   name: z.string().min(2).max(50),
@@ -15,23 +15,18 @@ export async function submitContactForm(values: ContactFormValues) {
   try {
     const validatedData = formSchema.parse(values);
 
-    // --- Implement Actual Email Sending Logic Here ---
-    // The following is a conceptual example using Nodemailer.
-    // You'll need to:
-    // 1. Set up an email service (e.g., Gmail with App Password, SendGrid, Mailgun, AWS SES).
-    // 2. Install nodemailer: `npm install nodemailer` (already added to package.json for you).
-    // 3. If using TypeScript, install types: `npm install @types/nodemailer --save-dev`
-    // 4. Configure environment variables for your email credentials (NEVER hardcode them).
-    //    Create a .env.local file in your project root with:
-    //    EMAIL_USER=your_email_address
-    //    EMAIL_PASS=your_email_password_or_app_password
-    //    (Ensure .env.local is in .gitignore)
-    // 5. Uncomment and adapt the Nodemailer code block below.
+    // --- IMPORTANT ---
+    // For this email sending to work, you MUST:
+    // 1. Create a .env.local file in your project root.
+    // 2. Add your Gmail credentials to .env.local:
+    //    EMAIL_USER=your_gmail_address@gmail.com
+    //    EMAIL_PASS=your_gmail_app_password  (Use an App Password if you have 2-Step Verification)
+    // 3. Ensure .env.local is in your .gitignore file.
+    // 4. Restart your development server (npm run dev) after creating/modifying .env.local.
+    // --- --- --- ---
 
-    /*
-    // --- BEGIN NODEMAILER EXAMPLE (Uncomment and configure) ---
     const transporter = nodemailer.createTransport({
-      service: 'gmail', // Or your SMTP provider, e.g., 'hotmail', 'yahoo'
+      service: 'gmail', // Or your SMTP provider
       auth: {
         user: process.env.EMAIL_USER, // Your email address from .env.local
         pass: process.env.EMAIL_PASS, // Your email password or app password from .env.local
@@ -39,7 +34,7 @@ export async function submitContactForm(values: ContactFormValues) {
     });
 
     const mailOptions = {
-      from: `"${validatedData.name}" <${process.env.EMAIL_USER}>`, // Sender address (your email)
+      from: `"${validatedData.name}" <${process.env.EMAIL_USER}>`, // Sender address (your configured email)
       replyTo: validatedData.email, // User's email to reply to
       to: "sitequickpersonal@gmail.com", // Your destination email
       subject: `New Contact Form Submission from ${validatedData.name}`,
@@ -60,32 +55,23 @@ export async function submitContactForm(values: ContactFormValues) {
       return { success: true, message: "Message sent successfully!" };
     } catch (emailError) {
       console.error("Error sending email:", emailError);
-      return { success: false, error: "Failed to send email. Please try again later." };
+      // It's good practice to not expose detailed error messages to the client.
+      // Log the detailed error on the server, and return a generic error to the user.
+      let errorMessage = "Failed to send email. Please try again later.";
+      if (emailError instanceof Error && 'code' in emailError && (emailError as any).code === 'EAUTH') {
+        errorMessage = "Failed to send email due to authentication issues. Please check server logs and email credentials.";
+        console.error("Nodemailer authentication error. Ensure EMAIL_USER and EMAIL_PASS are correct and the account is configured for SMTP access (e.g., App Password for Gmail).");
+      } else if (emailError instanceof Error) {
+        console.error("Nodemailer error details:", emailError.message);
+      }
+      return { success: false, error: errorMessage };
     }
-    // --- END NODEMAILER EXAMPLE ---
-    */
 
-    // For now, we are logging to the console as a placeholder (current behavior):
-    console.log("--- New Contact Form Submission (Simulated Email) ---");
-    console.log("Data received:", validatedData);
-    console.log(`To: sitequickpersonal@gmail.com`);
-    console.log(`From (User's Email): ${validatedData.email}`);
-    console.log(`Subject: New Contact from Website - ${validatedData.name}`);
-    console.log("Body:");
-    console.log(`  Name: ${validatedData.name}`);
-    console.log(`  Email: ${validatedData.email}`);
-    console.log(`  Message: ${validatedData.message}`);
-    console.log("----------------------------------------------------");
-    console.log("EMAIL SENDING IS CURRENTLY SIMULATED. UNCOMMENT AND CONFIGURE NODEMAILER (OR OTHER SERVICE) IN src/app/actions/contact.ts TO ENABLE ACTUAL EMAIL SENDING.");
-
-
-    // Simulate successful submission if not using real email sending yet
-    return { success: true, message: "Message sent successfully! (Logged to console - Email sending not yet configured)" };
   } catch (error) {
     if (error instanceof z.ZodError) {
       return { success: false, error: "Validation failed.", details: error.errors };
     }
-    console.error("Error submitting contact form:", error);
+    console.error("Error submitting contact form (outside of email sending):", error);
     return { success: false, error: "An unexpected error occurred." };
   }
 }
