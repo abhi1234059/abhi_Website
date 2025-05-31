@@ -7,9 +7,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { ArrowRight, Briefcase, Lightbulb, Users, Send, MessageSquare } from 'lucide-react';
 import { ContactForm } from '@/components/connect/ContactForm';
 import { ReviewsSection } from '@/components/connect/ReviewsSection';
-import { PricingSection } from '@/components/home/PricingSection'; // Added import
+import { PricingSection } from '@/components/home/PricingSection';
 
-// Data and Interfaces from former about/page.tsx
 interface Service {
   id: string;
   icon: React.ReactNode;
@@ -38,7 +37,6 @@ const services: Service[] = [
   },
 ];
 
-// Data and Interfaces from former gallery/page.tsx
 interface GalleryItem {
   id: string;
   src: string;
@@ -55,7 +53,7 @@ const galleryItems: GalleryItem[] = [
     alt: 'Abstract 3D render',
     title: 'Cosmic Swirls',
     description: 'A mesmerizing swirl of colors in 3D space.',
-    aiHint: 'abstract 3D'
+    aiHint: 'animated 3D abstract'
   },
   {
     id: '2',
@@ -63,7 +61,7 @@ const galleryItems: GalleryItem[] = [
     alt: 'Geometric shapes animation still',
     title: 'Geometric Dance',
     description: 'A snapshot from an animation featuring dancing geometric forms.',
-    aiHint: 'geometric animation'
+    aiHint: 'dynamic 3D geometry'
   },
   {
     id: '3',
@@ -71,7 +69,7 @@ const galleryItems: GalleryItem[] = [
     alt: 'Character model',
     title: 'Stylized Character',
     description: 'A 3D model of a cartoon-style character.',
-    aiHint: '3D character'
+    aiHint: 'stylized 3D character model'
   },
   {
     id: '4',
@@ -79,15 +77,15 @@ const galleryItems: GalleryItem[] = [
     alt: 'Product visualization',
     title: 'Product Showcase',
     description: 'A realistic 3D render of a product concept.',
-    aiHint: 'product render'
+    aiHint: 'sleek 3D product'
   },
   {
     id: '5',
     src: 'https://placehold.co/600x400.png',
-    alt: 'Animated logo concept',
-    title: 'Logo in Motion',
-    description: 'Concept for an animated brand logo.',
-    aiHint: 'animated logo'
+    alt: 'Animated 3D Concept',
+    title: 'Motion Graphics Abstract',
+    description: 'Concept for an animated 3D piece.',
+    aiHint: 'complex 3D animation'
   },
   {
     id: '6',
@@ -95,7 +93,7 @@ const galleryItems: GalleryItem[] = [
     alt: 'Architectural visualization',
     title: 'Modern Villa',
     description: 'A 3D visualization of a modern architectural design.',
-    aiHint: 'architecture 3D'
+    aiHint: 'modern 3D architecture'
   },
 ];
 
@@ -130,15 +128,17 @@ export default function HomePage() {
         </div>
         <Card className="overflow-hidden shadow-xl">
           <div className="md:flex">
-            <div className="md:w-1/3 relative min-h-[300px] md:min-h-0">
-              <Image
-                src="https://placehold.co/400x600.png"
-                alt="Dankhara Abhi Profile"
-                layout="fill"
-                objectFit="cover"
-                className="rounded-l-lg"
-                data-ai-hint="professional portrait"
-              />
+            <div className="md:w-1/3 relative min-h-[300px] md:min-h-0 flex items-center justify-center p-4">
+              <div className="w-full aspect-square max-w-[250px] md:max-w-full relative">
+                <Image
+                  src="https://placehold.co/300x300.png"
+                  alt="AbhiConnect Logo"
+                  layout="fill"
+                  objectFit="contain"
+                  className="rounded-lg animate-image-float"
+                  data-ai-hint="modern abstract logo"
+                />
+              </div>
             </div>
             <div className="md:w-2/3 p-8 md:p-12">
               <h2 className="text-3xl font-headline font-semibold text-primary mb-6">Hi, I'm Abhi Dankhara</h2>
@@ -196,7 +196,7 @@ export default function HomePage() {
                   alt={item.alt}
                   layout="fill"
                   objectFit="cover"
-                  className="transition-transform duration-500 group-hover:scale-105"
+                  className="transition-transform duration-500 group-hover:scale-105 animate-image-pan-slow"
                   data-ai-hint={item.aiHint}
                 />
               </div>
