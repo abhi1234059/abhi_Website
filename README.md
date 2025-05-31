@@ -1,3 +1,4 @@
+
 # Firebase Studio
 
 This is a NextJS starter in Firebase Studio.
@@ -59,9 +60,9 @@ Follow these steps to push your project code to your GitHub repository (e.g., `h
 
 6.  **Push your code to GitHub:**
     *   This uploads your committed files to your GitHub repository. The `-u` flag sets the upstream branch so that future pushes can be done with just `git push`.
-    ```bash
-    git push -u origin main
-    ```
+    *   ```bash
+        git push -u origin main
+        ```
     *   **Troubleshooting Push Issues:**
         *   **If you see `! [rejected] main -> main (fetch first)`:** This means your GitHub repository has changes that your local project doesn't. You need to pull those changes first. Try:
             ```bash
