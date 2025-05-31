@@ -82,9 +82,26 @@ export default {
           '0%': { opacity: '0', transform: 'translateY(20px)' },
           '100%': { opacity: '1', transform: 'translateY(0)' },
         },
-        pulseGlow: {
-          '0%, 100%': { textShadow: '0 0 5px hsl(var(--primary-foreground)), 0 0 10px hsl(var(--primary))' },
-          '50%': { textShadow: '0 0 10px hsl(var(--primary-foreground)), 0 0 20px hsl(var(--primary)), 0 0 30px hsl(var(--primary))' },
+        pulseGlow: { // Enhanced for a pseudo-3D effect and more vibrant glow
+          '0%, 100%': {
+            textShadow: `
+              0.5px 0.5px 0px hsl(var(--primary-foreground)/0.4),
+              -0.5px -0.5px 0px hsl(var(--primary)/0.15),
+              1px 1px 2px hsl(var(--background)/0.2),
+              0 0 5px hsl(var(--primary)/0.6),
+              0 0 10px hsl(var(--primary)/0.4)
+            `
+          },
+          '50%': {
+            textShadow: `
+              0.5px 0.5px 0px hsl(var(--primary-foreground)/0.7),
+              -0.5px -0.5px 0px hsl(var(--primary)/0.3),
+              1px 1px 2px hsl(var(--background)/0.0), /* Reduce background shadow at peak glow */
+              0 0 12px hsl(var(--primary)/0.9),
+              0 0 22px hsl(var(--primary)/0.7),
+              0 0 32px hsl(var(--accent)/0.5) /* Added accent glow */
+            `
+          },
         },
         heroImagePulseFloat: {
             '0%': { transform: 'translateY(0px) scale(1)' },
