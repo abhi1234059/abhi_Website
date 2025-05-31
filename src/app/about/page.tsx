@@ -1,3 +1,4 @@
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Image from 'next/image';
@@ -44,15 +45,11 @@ export default function AboutPage() {
       <section className="container mx-auto px-4">
         <Card className="overflow-hidden shadow-xl">
           <div className="md:flex">
-            <div className="md:w-1/3 relative min-h-[300px] md:min-h-0">
-              <Image
-                src="https://placehold.co/400x600.png"
-                alt="Dankhara Abhi Profile"
-                layout="fill"
-                objectFit="cover"
-                className="rounded-l-lg"
-                data-ai-hint="professional portrait"
-              />
+            <div className="md:w-1/3 flex flex-col items-center justify-center p-8 bg-primary/5 rounded-l-lg">
+              <Avatar className="h-48 w-48 shadow-xl ring-4 ring-primary/20 ring-offset-4 ring-offset-background">
+                <AvatarImage src="https://placehold.co/200x200.png" alt="Dankhara Abhi" data-ai-hint="professional portrait" />
+                <AvatarFallback className="text-5xl bg-primary/10 text-primary">AD</AvatarFallback>
+              </Avatar>
             </div>
             <div className="md:w-2/3 p-8 md:p-12">
               <h2 className="text-3xl font-headline font-semibold text-primary mb-6">Hi, I'm Abhi Dankhara</h2>
