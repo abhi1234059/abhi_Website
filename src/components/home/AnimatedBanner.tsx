@@ -1,7 +1,7 @@
 
 "use client";
 
-import { Zap } from 'lucide-react'; // Import the Zap icon
+import { Atom } from 'lucide-react'; // Changed from Zap to Atom
 
 interface AnimatedBannerProps {
   name: string;
@@ -12,7 +12,7 @@ export function AnimatedBanner({ name }: AnimatedBannerProps) {
     <div className="relative py-8 flex flex-col items-center"> {/* Centering content vertically */}
       <div className="mb-6 animate-hero-image-pulse-float"> {/* Container for icon with animation */}
         <div className="w-32 h-32 rounded-full shadow-lg bg-accent/10 flex items-center justify-center">
-          <Zap className="w-20 h-20 text-accent" />
+          <Atom className="w-20 h-20 text-accent" /> {/* Changed from Zap to Atom */}
         </div>
       </div>
       <h1 className="text-5xl md:text-7xl font-headline font-bold animate-pulse-glow text-primary select-none text-center">
