@@ -19,23 +19,30 @@ export async function submitContactForm(values: ContactFormValues) {
     // For this email sending to work, you MUST:
     // 1. Create a .env.local file in your project root.
     // 2. Add your Gmail credentials to .env.local:
-    //    EMAIL_USER=your_gmail_address@gmail.com
-    //    EMAIL_PASS=your_gmail_app_password  (Use an App Password if you have 2-Step Verification)
+    //    EMAIL_USER=your_gmail_address_to_send_from@gmail.com
+    //    EMAIL_PASS=your_gmail_app_password
+    //    (Use an App Password if you have 2-Step Verification enabled on your Gmail account.
+    //     Search "Sign in with App Passwords Google" for instructions.)
     // 3. Ensure .env.local is in your .gitignore file.
     // 4. Restart your development server (npm run dev) after creating/modifying .env.local.
     // --- --- --- ---
 
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+      console.error("EMAIL_USER or EMAIL_PASS environment variables are not set. Email sending will fail.");
+      return { success: false, error: "Email server not configured. Please contact support." };
+    }
+
     const transporter = nodemailer.createTransport({
-      service: 'gmail', // Or your SMTP provider
+      service: 'gmail',
       auth: {
-        user: process.env.EMAIL_USER, // Your email address from .env.local
-        pass: process.env.EMAIL_PASS, // Your email password or app password from .env.local
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
       },
     });
 
     const mailOptions = {
-      from: `"${validatedData.name}" <${process.env.EMAIL_USER}>`, // Sender address (your configured email)
-      replyTo: validatedData.email, // User's email to reply to
+      from: `"${validatedData.name}" <${process.env.EMAIL_USER}>`,
+      replyTo: validatedData.email,
       to: "sitequickpersonal@gmail.com", // Your destination email
       subject: `New Contact Form Submission from ${validatedData.name}`,
       html: `
@@ -55,13 +62,21 @@ export async function submitContactForm(values: ContactFormValues) {
       return { success: true, message: "Message sent successfully!" };
     } catch (emailError) {
       console.error("Error sending email:", emailError);
-      // It's good practice to not expose detailed error messages to the client.
-      // Log the detailed error on the server, and return a generic error to the user.
       let errorMessage = "Failed to send email. Please try again later.";
+
+      // Check if it's an authentication error
       if (emailError instanceof Error && 'code' in emailError && (emailError as any).code === 'EAUTH') {
         errorMessage = "Failed to send email due to authentication issues. Please check server logs and email credentials.";
-        console.error("Nodemailer authentication error. Ensure EMAIL_USER and EMAIL_PASS are correct and the account is configured for SMTP access (e.g., App Password for Gmail).");
+        console.error(
+            "NODEMAILER AUTHENTICATION ERROR (EAUTH):\n" +
+            "1. Verify EMAIL_USER and EMAIL_PASS in your .env.local file are correct for the Gmail account you're sending from.\n" +
+            "2. If using 2-Step Verification on Gmail, YOU MUST USE AN APP PASSWORD for EMAIL_PASS. Your regular password will not work.\n" +
+            "   Search 'Sign in with App Passwords Google' for instructions on how to generate one.\n" +
+            "3. If not using 2-Step Verification (less secure), ensure 'Less secure app access' is enabled in your Google account settings. (Not recommended - use App Passwords instead).\n" +
+            "4. Ensure you've restarted your development server after changing .env.local."
+        );
       } else if (emailError instanceof Error) {
+        // Log other types of Nodemailer errors
         console.error("Nodemailer error details:", emailError.message);
       }
       return { success: false, error: errorMessage };
